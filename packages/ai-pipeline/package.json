@@ -1,0 +1,17 @@
+{
+  "name": "@edusphere/ai-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {},
+  "dependencies": {
+    "@edusphere/shared": "workspace:*",
+    "ai": "^3.0.0",
+    "@ai-sdk/openai": "^0.0.63",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

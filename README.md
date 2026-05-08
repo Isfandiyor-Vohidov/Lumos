@@ -1,0 +1,39 @@
+# 🔱 Lumos (EduSphere OS)
+
+> **AI-Native Telegram LMS & Lead Generation Ecosystem for Educational Centers.** Built with an enterprise-grade monorepo architecture featuring **Next.js 15**, **grammY**, and **Supabase**.
+
+---
+
+## 📖 Overview
+
+**Lumos** is a high-performance, multitenant automation platform designed to bridge the gap between local educational centers and prospective students. It eliminates friction in the onboarding process by moving course discovery and placement testing directly into Telegram.
+
+1. **Telegram Bot (`apps/bot`)**: Serves as the conversational entry point, handling instant student registration and real-time administrator notifications.
+2. **Telegram WebApp (TMA) (`apps/webapp`)**: A fast, fluid, and secure mini-application inside Telegram where users browse courses and take dynamic placement tests.
+3. **AI-Native Pipeline (`packages/ai-pipeline`)**: Automatically evaluates test submissions, diagnoses learning gaps, and generates structured feedback using LLMs.
+4. **Unified DB Core (`supabase/`)**: A secure, relational schema with Row-Level Security (RLS) and multitenancy capabilities.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+### **Monorepo & Packages**
+* **Orchestration**: [Turborepo](https://turbo.build/) + `pnpm` workspaces for ultra-fast builds and local caching.
+* **Shared Contract (`packages/shared`)**: Shared TypeScript types, Zod schemas, utility functions, and system constants.
+* **Database Client (`packages/supabase-client`)**: Unified server-side SDK using the PostgreSQL Service Role to secure critical operations.
+* **AI Engine (`packages/ai-pipeline`)**: Unified LLM integration layer powered by Google Gemini and OpenAI.
+
+### **Applications**
+* **Frontend/Backend (TMA)**: [Next.js 15](https://nextjs.org/) (App Router, Tailwind CSS, Zustand, Radix UI/Shadcn).
+* **Telegram Bot**: [grammY](https://grammy.dev/) (TypeScript, asynchronous sessions, and native inline keyboard actions).
+* **Database & Auth**: [Supabase](https://supabase.com/) (PostgreSQL, Row-Level Security, Database Webhooks, Local Docker development).
+
+---
+
+## 🔒 Security & Data Flow
+
+To ensure the system's integrity, Lumos enforces strict security practices:
+
+* **Cryptographic TMA Verification**: Every single API request to `/api/*` goes through an Edge-compatible Next.js Middleware. The `window.Telegram.WebApp.initData` payload is validated using HMAC-SHA256 with the `BOT_TOKEN` as the secret key.
+* **Data Isolation (Multitenancy)**: All records are strictly scoped under a `center_id` parameter to allow multiple educational centers to run on the same instance safely.
+* **Secure Database Access**: Direct client-side calls to Supabase are restricted. Heavy mutations and critical writes (such as marking a test as completed and invoking the AI) are handled by serverless Next.js API Routes using a secure `supabase-server` client.

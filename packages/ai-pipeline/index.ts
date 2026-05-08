@@ -1,0 +1,1 @@
+export { runAssessment } from './src/pipeline';

@@ -1,0 +1,22 @@
+name: Deploy Bot
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/bot/**'
+      - 'packages/**'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Railway
+        uses: railwayapp/railway-deploy@v1
+        with:
+          service: bot
+          railway_api_token: ${{ secrets.RAILWAY_API_TOKEN }}
+          deployment_variables: |
+            BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+            SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+            SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+            WEBAPP_URL=${{ secrets.WEBAPP_URL }}
